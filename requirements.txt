@@ -1,0 +1,6 @@
+pysr
+sympy
+numpy
+scipy
+matplotlib
+PyQt6
