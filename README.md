@@ -12,4 +12,10 @@ Solving ODE with genetic programming algorithms
 pip install -r requirements.txt
 ```
 
+## Running the example
+
+```bash
+python example.py
+```
+
 Note: the first run can take a while as Julia packcages will be installed.
