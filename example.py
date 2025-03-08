@@ -47,16 +47,18 @@ if __name__ == '__main__':
 
     y_prediction = model.predict(x_vals.reshape(-1, 1), index=best_idx)
 
+    sympy_simplified = simplify(model.sympy())
+
     # Plotting 2 plots simultneously
     solution_plot = plt.figure(1)
     plt.plot(x_vals, y_sol, 'g', label='y(x)_num')
     plt.plot(x_vals, exact_solution(x_vals), 'r', label='y(x)_exact')
-    plt.plot(x_vals, y_prediction, 'b', label=simplify(model.sympy()))
+    plt.plot(x_vals, y_prediction, 'b', label=sympy_simplified)
     plt.legend(loc='best')
     plt.xlabel('x')
     plt.grid()
 
     graph_plot = plt.figure(2)
-    plot_graph(model.sympy())
+    plot_graph(sympy_simplified)
 
     plt.show()

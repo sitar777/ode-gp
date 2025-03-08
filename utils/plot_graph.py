@@ -49,11 +49,11 @@ def plot_graph(expr):
     _walk(Node("Root", 0), expr)
 
     # Create the graph from the lists of nodes and links:
-    graph_json = {"nodes": node_list, "links": link_list}
+    graph_json = {"nodes": node_list, "edges": link_list}
     node_labels = {node['id']: node['name'] for node in graph_json['nodes']}
     for n in graph_json['nodes']:
         del n['name']
-    graph = json_graph.node_link_graph(graph_json, directed=True, multigraph=False)
+    graph = json_graph.node_link_graph(graph_json, directed=True, multigraph=False, edges="edges")
 
     # Layout and plot the graph
     pos = graphviz_layout(graph, prog="dot")
