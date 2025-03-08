@@ -5,7 +5,7 @@ Solving ODE with genetic programming algorithms
 ## Requiements
 
 - Python 3.12.3+
-graphviz
+- graphviz
 
 ## Installing packages
 
