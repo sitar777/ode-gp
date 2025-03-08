@@ -12,6 +12,7 @@ def exact_solution(x):
     return 0.2*x**2 + 2*np.cos(4*x) - 2
 
 
+# TODO function to class
 def sample_function(x, y) -> np.ndarray:
     """example ODE to solve"""
     return np.array(
@@ -39,7 +40,6 @@ if __name__ == '__main__':
     )
 
     model.fit(x_vals.reshape(-1, 1), y_sol)
-    print(model.sympy())
 
     best_idx = model.equations_.query(
         f"loss < {2 * model.equations_.loss.min()}"
@@ -47,6 +47,7 @@ if __name__ == '__main__':
 
     y_prediction = model.predict(x_vals.reshape(-1, 1), index=best_idx)
 
+    # Plotting 2 plots simultneously
     solution_plot = plt.figure(1)
     plt.plot(x_vals, y_sol, 'g', label='y(x)_num')
     plt.plot(x_vals, exact_solution(x_vals), 'r', label='y(x)_exact')
