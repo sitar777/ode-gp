@@ -1,5 +1,5 @@
-from plot_graph import plot_graph
-from solve_ode import solve_ode
+from .plot_graph import plot_graph
+from .solve_ode import solve_ode
 
 
 __all__ = (
