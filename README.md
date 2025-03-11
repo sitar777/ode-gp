@@ -20,5 +20,3 @@ python example.py
 ```
 
 Note: the first run can take a while as Julia packcages will be installed.
-
-
