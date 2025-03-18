@@ -35,14 +35,18 @@ if __name__ == '__main__':
 
     # Plotting 2 plots simultneously
     solution_plot = plt.figure(1)
+
+    # TODO ODE plotting logic to class
     plt.plot(ode.x_vals, y_sol, 'g', label='y(x)_num')
     plt.plot(ode.x_vals, ode.exact_solution(ode.x_vals), 'r', label='y(x)_exact')
+
     plt.plot(ode.x_vals, y_prediction, 'b', label=sympy_simplified)
+
     plt.legend(loc='best')
     plt.xlabel('x')
     plt.grid()
 
+    # Plotting tree
     graph_plot = plt.figure(2)
     plot_graph(sympy_simplified)
-
     plt.show()
