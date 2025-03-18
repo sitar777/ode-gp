@@ -24,3 +24,4 @@ Note: the first run can take a while as Julia packcages will be installed.
 ## Checklist
 
 [x] Self-Checking if exact solution is provided
+[x] Prettify tree display
