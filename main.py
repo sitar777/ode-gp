@@ -11,6 +11,8 @@ from examples import ode_2 as ode
 if __name__ == '__main__':
     y_sol = solve_ode(ode.function, ode.x_vals, ode.initial_condition)
 
+    # Info about regressor parameters
+    # https://astroautomata.com/PySR/api/#pysrregressor-parameters
     model = PySRRegressor(
         niterations=200,
         binary_operators=["+", "*"],
@@ -23,17 +25,22 @@ if __name__ == '__main__':
         ),
     )
 
+    # Model training
     model.fit(ode.x_vals.reshape(-1, 1), y_sol)
 
+    # Best index search
     best_idx = model.equations_.query(
         f"loss < {2 * model.equations_.loss.min()}"
     ).score.idxmax()
 
+    # Getting values predicted by regressor
     y_prediction = model.predict(ode.x_vals.reshape(-1, 1), index=best_idx)
 
+    # Simplifying the solution representaion
+    # https://docs.sympy.org/latest/modules/simplify/simplify.html#simplify
     sympy_simplified = simplify(model.sympy())
 
-    # Plotting 2 plots simultneously
+    # Plotting solution
     solution_plot = plt.figure(1)
 
     # TODO ODE plotting logic to class
