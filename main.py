@@ -2,10 +2,18 @@
 
 import matplotlib.pyplot as plt
 from pysr import PySRRegressor
-from sympy import simplify
+from sympy import simplify, Number
 
 from utils import plot_graph, solve_ode
-from examples import ode_2 as ode
+from examples import ode_1 as ode
+
+from sklearn.metrics import mean_squared_error
+
+
+def round_expr(expr, num_digits, skip=True):
+    if skip:
+        return expr
+    return expr.xreplace({n : round(n, num_digits) for n in expr.atoms(Number)})
 
 
 if __name__ == '__main__':
@@ -20,7 +28,7 @@ if __name__ == '__main__':
         populations=300,
         model_selection="best",
         early_stop_condition=(
-            "stop_if(loss, complexity) = loss < 1e-6 && complexity < 20"
+            "stop_if(loss, complexity) = loss < 1e-6 && complexity < 15"
             # Stop early if we find a good and simple equation
         ),
     )
@@ -38,16 +46,20 @@ if __name__ == '__main__':
 
     # Simplifying the solution representaion
     # https://docs.sympy.org/latest/modules/simplify/simplify.html#simplify
-    sympy_simplified = simplify(model.sympy())
+    sympy_simplified = round_expr(simplify(model.sympy()), 4)
 
     # Plotting solution
     solution_plot = plt.figure(1)
 
     # TODO ODE plotting logic to class
-    plt.plot(ode.x_vals, y_sol, 'g', label='y(x)_num')
-    plt.plot(ode.x_vals, ode.exact_solution(ode.x_vals), 'r', label='y(x)_exact')
+    plt.scatter(ode.x_vals, y_sol, label='y(x)_num', color='red')
 
+    y_exact = ode.exact_solution(ode.x_vals)
+
+    plt.plot(ode.x_vals, y_exact, 'r', label='y(x)_exact')
     plt.plot(ode.x_vals, y_prediction, 'b', label=sympy_simplified)
+
+    print(mean_squared_error(y_exact, y_prediction))
 
     plt.legend(loc='best')
     plt.xlabel('x')

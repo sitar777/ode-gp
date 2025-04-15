@@ -5,3 +5,4 @@ scipy
 matplotlib
 PyQt6
 networkx
+scikit-learn
