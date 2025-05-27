@@ -7,6 +7,12 @@ from networkx.drawing.nx_pydot import graphviz_layout
 from networkx.readwrite import json_graph
 
 
+NAME_SYMBOL_MAPPING = {
+    "Add": "+",
+    "Mul": "*",
+}
+
+
 def plot_graph(expr):
     """
     Make a graph plot of the internal representation of SymPy expression.
@@ -34,16 +40,20 @@ def plot_graph(expr):
         def __repr__(self):
             return self.name
 
+    def render_name(name):
+        if name in NAME_SYMBOL_MAPPING:
+            return NAME_SYMBOL_MAPPING[name]
+        return name
 
     def _walk(parent, expr):
         """Walk over the expression tree recursively creating nodes and links."""
         if expr.is_Atom:
             node = Node(str(expr), Id.get())
-            node_list.append({"id": node.id, "name": node.name})
+            node_list.append({"id": node.id, "name": render_name(node.name)})
             link_list.append({"source": parent.id, "target": node.id})
         else:
             node = Node(str(type(expr).__name__), Id.get())
-            node_list.append({"id": node.id, "name": node.name})
+            node_list.append({"id": node.id, "name": render_name(node.name)})
             link_list.append({"source": parent.id, "target": node.id})
             for arg in expr.args:
                 _walk(node, arg)
