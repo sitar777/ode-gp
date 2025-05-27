@@ -1,24 +1,13 @@
 """Main script"""
 
-import matplotlib.pyplot as plt
 from pysr import PySRRegressor
-from sympy import simplify, Number
+from sympy import simplify
 
-from utils import plot_graph, solve_ode
+from utils import round_expr
 from examples import ode_1 as ode
-
-from sklearn.metrics import mean_squared_error
-
-
-def round_expr(expr, num_digits, skip=True):
-    if skip:
-        return expr
-    return expr.xreplace({n : round(n, num_digits) for n in expr.atoms(Number)})
 
 
 if __name__ == '__main__':
-    y_sol = solve_ode(ode.function, ode.x_vals, ode.initial_condition)
-
     # Info about regressor parameters
     # https://astroautomata.com/PySR/api/#pysrregressor-parameters
     model = PySRRegressor(
@@ -33,6 +22,7 @@ if __name__ == '__main__':
         ),
     )
 
+    y_sol = ode.solution
     # Model training
     model.fit(ode.x_vals.reshape(-1, 1), y_sol)
 
@@ -46,26 +36,7 @@ if __name__ == '__main__':
 
     # Simplifying the solution representaion
     # https://docs.sympy.org/latest/modules/simplify/simplify.html#simplify
-    sympy_simplified = round_expr(simplify(model.sympy()), 4)
+    sympy_simplified = round_expr(simplify(model.sympy()), 4, skip=False)
 
     # Plotting solution
-    solution_plot = plt.figure(1)
-
-    # TODO ODE plotting logic to class
-    plt.scatter(ode.x_vals, y_sol, label='y(x)_num', color='red')
-
-    y_exact = ode.exact_solution(ode.x_vals)
-
-    plt.plot(ode.x_vals, y_exact, 'r', label='y(x)_exact')
-    plt.plot(ode.x_vals, y_prediction, 'b', label=sympy_simplified)
-
-    print(mean_squared_error(y_exact, y_prediction))
-
-    plt.legend(loc='best')
-    plt.xlabel('x')
-    plt.grid()
-
-    # Plotting tree
-    graph_plot = plt.figure(2)
-    plot_graph(sympy_simplified)
-    plt.show()
+    ode.plot_results(y_prediction, sympy_simplified)
