@@ -32,7 +32,7 @@ class ODE:
         raise NotImplementedError
 
     @cached_property
-    def solution(self):
+    def numerical_solution(self):
         """ODE solution"""
         num_sol = solve_ivp(
             self.function,
@@ -48,13 +48,12 @@ class ODE:
 
         # plotting function graph
         plt.figure(1)
-        plt.scatter(self.x_vals, self.solution, label='y(x)_num', color='red')
+        plt.scatter(self.x_vals, self.numerical_solution, label='y(x)_num', color='red')
 
         try:
             y_exact = self.exact_solution(self.x_vals)
             plt.plot(self.x_vals, y_exact, 'r', label='y(x)_exact')
-
-            print(mean_squared_error(y_exact, y_prediction))
+            plt.figtext(0.01, 0.95, f'Mean squared error: {mean_squared_error(y_exact, y_prediction)}')
         except NotImplementedError:
             pass
 
