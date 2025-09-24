@@ -1,6 +1,4 @@
 """Main script"""
-
-from pysr import PySRRegressor
 from sympy import simplify
 
 from utils import round_expr, configure_regressor
