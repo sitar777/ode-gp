@@ -51,9 +51,9 @@ ode_2 = ODE2()
 class ODE3(ODE):
     """Third example"""
 
-    initial_condition=[1, 5.4]
-    x_range=[0, 8]
-    unary_operators=['sin', 'cos', 'exp']
+    initial_condition=[3, 2]
+    x_range=[1, 8]
+    unary_operators=['sin', 'cos', 'log']
 
     def function(self, x, y):
         return np.array(

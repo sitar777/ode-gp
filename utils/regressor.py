@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from .ode import ODE
 
 
-def configure_regressor(ode: 'ODE') -> PySRRegressor:
+def configure_regressor(ode: 'ODE', optimal_complexity=15) -> PySRRegressor:
     """Configuring regressor"""
 
     # Info about regressor parameters
@@ -19,7 +19,7 @@ def configure_regressor(ode: 'ODE') -> PySRRegressor:
         populations=300,
         model_selection="best",
         early_stop_condition=(
-            "stop_if(loss, complexity) = loss < 1e-6 && complexity < 15"
+            f"stop_if(loss, complexity) = loss < 1e-6 && complexity < {optimal_complexity}"
             # Stop early if we find a good and simple equation
         ),
     )
