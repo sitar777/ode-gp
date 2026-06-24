@@ -68,3 +68,26 @@ class ODE3(ODE):
 
 
 ode_3 = ODE3()
+
+
+class MalthusModel(ODE):
+    """Malthus model"""
+
+    initial_condition = [2]
+    x_range = [0, 3] # big interval for exponential function is bad
+    unary_operators = ["exp"]
+    binary_operators = ["+", "*"]
+
+    def __init__(self, r) -> None:
+        super().__init__()
+        self.r = r # constant growth rate
+
+    def function(self, x, y):
+        return np.array(
+            y[0] * self.r,
+        )
+
+    def exact_solution(self, x):
+        return self.initial_condition[0]*np.exp(self.r*x)
+
+malthus_model = MalthusModel(r=3)

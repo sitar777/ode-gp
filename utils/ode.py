@@ -17,6 +17,7 @@ class ODE:
     x_range: list
     unary_operators: list[str]
     points_number: int | None = 100
+    binary_operators: list[str] = ["+", "*"]
 
     @cached_property
     def x_vals(self):

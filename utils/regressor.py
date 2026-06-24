@@ -14,7 +14,7 @@ def configure_regressor(ode: 'ODE', optimal_complexity=15) -> PySRRegressor:
     # https://astroautomata.com/PySR/api/#pysrregressor-parameters
     return PySRRegressor(
         niterations=200,
-        binary_operators=["+", "*"],
+        binary_operators=ode.binary_operators,
         unary_operators=ode.unary_operators,
         populations=300,
         model_selection="best",
