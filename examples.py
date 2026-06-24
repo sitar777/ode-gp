@@ -1,7 +1,7 @@
 """Examples to solve"""
 
 import numpy as np
-from utils import ODE
+from utils import ODE, PDE
 
 
 class ODE1(ODE):
@@ -78,7 +78,7 @@ class MalthusModel(ODE):
     unary_operators = ["exp"]
     binary_operators = ["+", "*"]
 
-    def __init__(self, r) -> None:
+    def __init__(self, r=3) -> None:
         super().__init__()
         self.r = r # constant growth rate
 
@@ -90,4 +90,45 @@ class MalthusModel(ODE):
     def exact_solution(self, x):
         return self.initial_condition[0]*np.exp(self.r*x)
 
-malthus_model = MalthusModel(r=3)
+malthus_model = MalthusModel()
+
+
+class HeatEquation1D(PDE):
+
+    x_range = [0, 1.0]
+    t_range = [0, 2.0]
+    points_number_x = 100
+    points_number_t = 4000
+    unary_operators = []
+    alpha = 0.1
+
+    @property
+    def dx(self):
+        return (self.x_range[1] - self.x_range[0]) / (self.points_number_x - 1)
+
+    @property
+    def dt(self):
+        return (self.t_range[1] - self.t_range[0]) / (self.points_number_t - 1)
+
+    @property
+    def r(self):
+        return self.alpha * self.dt / self.dx**2
+
+    def initial_condition(self, x):
+        return np.sin(np.pi * x / self.x_range[1])
+
+    def exact_solution(self, x, t):
+        return np.sin(np.pi * x / self.x_range[1]) * np.exp(-self.alpha * (np.pi / self.x_range[1])**2 * t)
+
+    @property
+    def numerical_solution(self):
+        u = np.zeros((self.points_number_t, self.points_number_x))
+        u[0, :] = self.initial_condition(self.x_vals)
+
+        for n in range(self.points_number_t - 1):
+            for i in range(1, self.points_number_x - 1):
+                u[n + 1, i] = u[n, i] + self.r * (u[n, i - 1] - 2 * u[n, i] + u[n, i + 1])
+
+        return u
+
+heat = HeatEquation1D()

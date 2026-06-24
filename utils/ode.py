@@ -1,7 +1,6 @@
 """ODE container class"""
 
 import numpy as np
-from functools import cached_property
 from utils import plot_graph
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
@@ -19,7 +18,7 @@ class ODE:
     points_number: int | None = 100
     binary_operators: list[str] = ["+", "*"]
 
-    @cached_property
+    @property
     def x_vals(self):
         """Returns x values for range"""
         return np.linspace(self.x_range[0], self.x_range[1], self.points_number)
@@ -32,7 +31,7 @@ class ODE:
         """Exact solution of ODE"""
         raise NotImplementedError
 
-    @cached_property
+    @property
     def numerical_solution(self):
         """ODE solution"""
         num_sol = solve_ivp(
