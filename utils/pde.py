@@ -14,6 +14,7 @@ class PDE:
     points_number_x: int | None = 100
     points_number_t: int | None = 100
     binary_operators: list[str] = ["+", "*"]
+    variable_names: list[str] = ["x", "t"]
 
     @property
     def x_vals(self):
@@ -51,12 +52,12 @@ class PDE:
         ax1.set_xlabel('x')
         ax1.set_ylabel('t')
         ax1.set_zlabel('u')
-        ax1.set_title(f'Predicted: {sympy_expression}')
+        ax1.set_title('PySR prediction')
 
+        mse = None
         try:
             u_exact = self.exact_solution(x, t)
             mse = mean_squared_error(u_exact.ravel(), y_prediction.ravel())
-            fig.suptitle(f'MSE (predicted vs exact): {mse:.4g}', y=0.97)
 
             ax2 = fig.add_subplot(122, projection='3d')
             ax2.plot_surface(x, t, u_exact, cmap='coolwarm')
@@ -67,10 +68,19 @@ class PDE:
         except NotImplementedError:
             pass
 
-        plt.tight_layout()
+        if mse is not None:
+            fig.text(
+                0.5, 0.02,
+                f'MSE (predicted vs exact): {mse:.4g}',
+                ha='center',
+                va='bottom',
+            )
+
+        fig.subplots_adjust(bottom=0.12)
         plt.show()
 
         # Plotting tree
         plt.figure(2)
         plot_graph(sympy_expression)
+        plt.title(str(sympy_expression), fontsize=9, wrap=True)
         plt.show()

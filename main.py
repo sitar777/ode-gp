@@ -8,7 +8,7 @@ from examples import ode_1 as ode, heat
 if __name__ == '__main__':
     # model = configure_regressor(ode)
     # # Model training
-    # model.fit(ode.x_vals.reshape(-1, 1), ode.numerical_solution)
+    # model.fit(ode.x_vals.reshape(-1, 1), ode.numerical_solution, variable_names=ode.variable_names)
 
     # # Best index search
     # best_idx = model.equations_.query(
@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     # Heat equation with controllable thermal conductivity
     model = configure_regressor(heat)
-    model.fit(heat.training_features, heat.training_target)
+    model.fit(heat.training_features, heat.training_target, variable_names=heat.variable_names)
 
     best_idx = model.equations_.query(
         f"loss < {2 * model.equations_.loss.min()}"

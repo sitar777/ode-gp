@@ -17,6 +17,7 @@ class ODE:
     unary_operators: list[str]
     points_number: int | None = 100
     binary_operators: list[str] = ["+", "*"]
+    variable_names: list[str] = ["x"]
 
     @property
     def x_vals(self):
@@ -53,17 +54,25 @@ class ODE:
         try:
             y_exact = self.exact_solution(self.x_vals)
             plt.plot(self.x_vals, y_exact, 'r', label='y(x)_exact')
-            plt.figtext(0.01, 0.95, f'MSE (predicted vs exact): {mean_squared_error(y_exact, y_prediction):.4g}')
+            mse = mean_squared_error(y_exact, y_prediction)
+            plt.gcf().text(
+                0.5, 0.02,
+                f'MSE (predicted vs exact): {mse:.4g}',
+                ha='center',
+                va='bottom',
+            )
         except NotImplementedError:
             pass
 
-        plt.plot(self.x_vals, y_prediction, 'b', label=sympy_expression)
+        plt.plot(self.x_vals, y_prediction, 'b', label='PySR prediction')
 
         plt.legend(loc='best')
         plt.xlabel('x')
         plt.grid()
+        plt.subplots_adjust(bottom=0.15)
 
         # Plotting tree
         plt.figure(2)
         plot_graph(sympy_expression)
+        plt.title(str(sympy_expression), fontsize=9, wrap=True)
         plt.show()
