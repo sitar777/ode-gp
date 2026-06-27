@@ -5,17 +5,18 @@ from pysr import PySRRegressor
 
 if TYPE_CHECKING:
     from .ode import ODE
+    from .pde import PDE
 
 
-def configure_regressor(ode: 'ODE', optimal_complexity=15) -> PySRRegressor:
+def configure_regressor(problem: 'ODE | PDE', optimal_complexity=15) -> PySRRegressor:
     """Configuring regressor"""
 
     # Info about regressor parameters
     # https://astroautomata.com/PySR/api/#pysrregressor-parameters
     return PySRRegressor(
         niterations=200,
-        binary_operators=ode.binary_operators,
-        unary_operators=ode.unary_operators,
+        binary_operators=problem.binary_operators,
+        unary_operators=problem.unary_operators,
         populations=300,
         model_selection="best",
         early_stop_condition=(

@@ -53,7 +53,7 @@ class ODE:
         try:
             y_exact = self.exact_solution(self.x_vals)
             plt.plot(self.x_vals, y_exact, 'r', label='y(x)_exact')
-            plt.figtext(0.01, 0.95, f'Mean squared error: {mean_squared_error(y_exact, y_prediction)}')
+            plt.figtext(0.01, 0.95, f'MSE (predicted vs exact): {mean_squared_error(y_exact, y_prediction):.4g}')
         except NotImplementedError:
             pass
 

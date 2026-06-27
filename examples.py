@@ -94,13 +94,18 @@ malthus_model = MalthusModel()
 
 
 class HeatEquation1D(PDE):
+    """1D heat equation with controllable thermal conductivity"""
 
     x_range = [0, 1.0]
     t_range = [0, 2.0]
     points_number_x = 100
     points_number_t = 4000
-    unary_operators = []
-    alpha = 0.1
+    unary_operators = ['sin', 'exp']
+    subsample_x = 2
+    subsample_t = 40
+
+    def __init__(self, alpha=0.1) -> None:
+        self.alpha = alpha
 
     @property
     def dx(self):
@@ -119,6 +124,18 @@ class HeatEquation1D(PDE):
 
     def exact_solution(self, x, t):
         return np.sin(np.pi * x / self.x_range[1]) * np.exp(-self.alpha * (np.pi / self.x_range[1])**2 * t)
+
+    @property
+    def training_features(self):
+        x, t = np.meshgrid(
+            self.x_vals[::self.subsample_x],
+            self.t_vals[::self.subsample_t],
+        )
+        return np.column_stack([x.ravel(), t.ravel()])
+
+    @property
+    def training_target(self):
+        return self.numerical_solution[::self.subsample_t, ::self.subsample_x].ravel()
 
     @property
     def numerical_solution(self):

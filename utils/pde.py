@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
+from utils import plot_graph
 
 
 class PDE:
@@ -20,6 +22,15 @@ class PDE:
     @property
     def t_vals(self):
         return np.linspace(self.t_range[0], self.t_range[1], self.points_number_t)
+
+    @property
+    def feature_matrix(self):
+        x, t = np.meshgrid(self.x_vals, self.t_vals)
+        return np.column_stack([x.ravel(), t.ravel()])
+
+    @property
+    def target(self):
+        return self.numerical_solution.ravel()
 
     def initial_condition(self, x):
         raise NotImplementedError
@@ -44,6 +55,9 @@ class PDE:
 
         try:
             u_exact = self.exact_solution(x, t)
+            mse = mean_squared_error(u_exact.ravel(), y_prediction.ravel())
+            fig.suptitle(f'MSE (predicted vs exact): {mse:.4g}', y=0.97)
+
             ax2 = fig.add_subplot(122, projection='3d')
             ax2.plot_surface(x, t, u_exact, cmap='coolwarm')
             ax2.set_xlabel('x')
@@ -54,4 +68,9 @@ class PDE:
             pass
 
         plt.tight_layout()
+        plt.show()
+
+        # Plotting tree
+        plt.figure(2)
+        plot_graph(sympy_expression)
         plt.show()
